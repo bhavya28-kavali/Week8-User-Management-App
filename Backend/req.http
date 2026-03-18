@@ -1,0 +1,32 @@
+
+### Create User
+POST http://localhost:4000/userapi/users
+Content-Type: application/json
+
+{
+  "name": "Bhavyakavali30",
+  "email": "bhavya30@gmail.com",
+  "dateOfBirth": "2006-01-28",
+  "mobileNumber": 9876543210,
+  "status": true
+}
+
+### Get All Users
+GET http://localhost:4000/userapi/users
+
+
+### Get User By ID
+GET http://localhost:4000/userapi/users/69ba4fcfc5d994bd6885aa25
+
+###  Update User By ID
+PUT http://localhost:4000/userapi/users/69ba4fcfc5d994bd6885aa25
+Content-Type: application/json
+
+{
+  "name": "Updated BhavyaKavali",
+  "status": false
+}
+
+### Delete User By ID
+
+DELETE http://localhost:4000/userapi/users/69ba4fcfc5d994bd6885aa25
