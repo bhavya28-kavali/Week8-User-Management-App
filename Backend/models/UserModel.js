@@ -28,10 +28,9 @@ const userSchema = new Schema(
     }
   },
   {
-  timestamps: true,
-  versionKey: false,  
-  strict: "throw"
-}
+    timestamps: true,
+    versionKey: false
+  }
 );
 
 // Create User Model

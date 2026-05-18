@@ -1,60 +1,121 @@
-console.log("UserApi Loaded Successfully");
 import express from "express";
 import UserModel from "../models/UserModel.js";
 
-const UserApp = express.Router();
+const userApp = express.Router();
 
-// Create User
-UserApp.post("/users", async (req, res) => {
-  try {
-    const newUser = await UserModel.create(req.body);
-    res.status(201).json(newUser);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
 
-// Read all Users
-UserApp.get("/users", async (req, res) => {
+// GET ALL USERS
+userApp.get("/users", async (req, res) => {
   try {
     const users = await UserModel.find();
-    res.json(users);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+
+    res.status(200).json(users);
+
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message
+    });
   }
 });
 
-// Read user by id
-UserApp.get("/users/:id", async (req, res) => {
+
+// CREATE USER
+userApp.post("/users", async (req, res) => {
   try {
+
+    console.log(req.body);
+
+    const newUser = new UserModel({
+      name: req.body.name,
+      email: req.body.email,
+      dateOfBirth: req.body.dateOfBirth,
+      mobileNumber: req.body.mobileNumber,
+      status: true
+    });
+
+    const savedUser = await newUser.save();
+
+    res.status(201).json(savedUser);
+
+  } catch (error) {
+
+    console.log("POST ERROR:", error);
+
+    res.status(500).json({
+      message: error.message
+    });
+  }
+});
+
+
+// GET USER BY ID
+userApp.get("/users/:id", async (req, res) => {
+  try {
+
     const user = await UserModel.findById(req.params.id);
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    res.status(200).json(user);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message
+    });
   }
 });
 
-// Delete user by id
-UserApp.delete("/users/:id", async (req, res) => {
-  try {
-    await UserModel.findByIdAndDelete(req.params.id);
-    res.json({ message: "User Deleted Successfully" });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
 
-// Update user by id
-UserApp.put("/users/:id", async (req, res) => {
+// UPDATE USER
+userApp.put("/users/:id", async (req, res) => {
   try {
+
     const updatedUser = await UserModel.findByIdAndUpdate(
       req.params.id,
       req.body,
       { new: true }
     );
-    res.json(updatedUser);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+
+    res.status(200).json(updatedUser);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message
+    });
   }
 });
-export default UserApp
+
+
+// DELETE USER
+userApp.delete("/users/:id", async (req, res) => {
+  try {
+
+    await UserModel.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      message: "User deleted successfully"
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message
+    });
+  }
+});
+
+export default userApp;
