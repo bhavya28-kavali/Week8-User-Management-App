@@ -31,6 +31,10 @@ async function connectDB() {
 
 connectDB();
 
+// Root Route
+app.get("/", (req, res) => {
+  res.send("Backend is running");
+});
 
 // Test Route
 app.get("/check", (req, res) => {
